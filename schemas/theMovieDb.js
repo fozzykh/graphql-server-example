@@ -17,8 +17,11 @@ export const typeDefs = gql`
   type Movie {
     id: Int
     title: String
-    poster_path: String,
+    poster_path: String
     budget: Int
+    genres: [Genre]
+    release_date: String
+    overview: String
   }
 
   type Genre {
@@ -31,11 +34,17 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     getMovie: (_, args) => apolloFetch({
-        query: `{ movie(id: ${args.id}) {
-            id,
-            title,
-            poster_path,
-            budget
+        query: `{
+          movie(id: ${args.id}) {
+            id
+            title
+            poster_path
+            overview
+            genres {
+              id
+              name
+            }
+            release_date
           }
         }`
       }).then(result => result.data.movie),
